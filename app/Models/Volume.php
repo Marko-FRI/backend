@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Volume extends Model
+{
+    use HasFactory;
+
+    protected $table = 'volumes';
+    protected $primaryKey = 'id_volume';
+
+    protected $fillable = [
+        'value'
+    ];
+}
