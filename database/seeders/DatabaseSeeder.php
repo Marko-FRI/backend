@@ -25,6 +25,7 @@ use App\Models\Selected_menu;
 use App\Models\Alergen;
 use App\Models\Food_has_alergen;
 use App\Models\Restaurant_has_drink;
+use App\Models\Category;
 
 class DatabaseSeeder extends Seeder
 {
@@ -49,6 +50,14 @@ class DatabaseSeeder extends Seeder
             Food_has_alergen::firstOrCreate([
                 'id_food' => Food::all()->random()->id_food,
                 'id_alergen' => Alergen::all()->random()->id_alergen
+            ]);
+        }
+
+        //generacija kategorij
+        $categories = ['Vse', 'Hitra hrana', 'Jedi z žara', 'Morske jedi', 'Veganske jedi', 'Solatne jedi'];
+        for ($i=0; $i < count($categories); $i++) { 
+            Category::factory(1)->create([
+                'name' => $categories[$i]
             ]);
         }
 
@@ -127,7 +136,8 @@ class DatabaseSeeder extends Seeder
 
             //generacija restavracija ima menuje
             Menu::factory(rand(5,10))->create([
-                'id_restaurant' => $restaurant->id_restaurant
+                'id_restaurant' => $restaurant->id_restaurant,
+                'id_category' => Category::all()->random()->id_category
             ])->each(function ($menu) use($restaurant) {
                 //generacija menu ima hrano
                     for ($i=0; $i < rand(3,4); $i++) {

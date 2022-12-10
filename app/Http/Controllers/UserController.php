@@ -78,8 +78,8 @@ class UserController extends Controller
         try {
             $user = new User();
             $user->email = $request->email;
-            $user->name = $request->name;
-            $user->surname = $request->surname;
+            $user->name = ucfirst(strtolower($request->name));
+            $user->surname = ucfirst(strtolower($request->surname));
             $user->password = Hash::make($request->password);
             $user->profile_image_path = 'profile.jpg';
             $user->remember_token = Str::random(12);
@@ -104,8 +104,8 @@ class UserController extends Controller
 
     function validateUserCredentialsForRegister(Request $request) {
         $rules = [
-            'name' => ['required', 'min:3', 'max:100', 'regex:/^[a-zA-Z]+$/'],
-            'surname'=> ['required', 'min:3', 'max:100', 'regex:/^[a-zA-Z]+$/'],
+            'name' => ['required', 'min:3', 'max:100', 'regex:/^[a-zA-ZšđčćžŠĐČĆŽ]+$/'],
+            'surname'=> ['required', 'min:3', 'max:100', 'regex:/^[a-zA-ZšđčćžŠĐČĆŽ]+$/'],
             'email' => ['required', 'email:rfc,dns', 'unique:users'],
             'password' => ['required_with:password_confirmation', 'min:6', 'confirmed','regex:/[a-z]/', 'regex:/[A-Z]/','regex:/[0-9]/','regex:/[@$!%*#?&_.-]/'],
             'password_confirmation' => ['same:password']
