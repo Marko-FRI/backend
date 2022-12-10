@@ -66,7 +66,7 @@ class Restaurant extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function schedules(): HasMany
+    public function schedule(): HasMany
     {
         return $this->hasMany(Per_day_schedule::class, 'id_restaurant', 'id_restaurant');
     }
@@ -119,5 +119,9 @@ class Restaurant extends Model
     public function menus(): HasMany
     {
         return $this->hasMany(Menu::class, 'id_restaurant', 'id_restaurant');
+    }
+
+    public function average_rating() {
+        return Review::where('id_restaurant', $this->attributes["id_restaurant"])->avg('rating');
     }
 }
