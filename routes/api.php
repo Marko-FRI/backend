@@ -22,10 +22,12 @@ test commit
 Route::post('/login', [UserController::class, 'login'])->name('login');
 Route::post('/register', [UserController::class, 'register'])->name('register');
 
+Route::get('/restaurantsFirstLoad', [HomeController::class, 'index']);
+Route::get('/restaurants', [HomeController::class, 'filtered']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [UserController::class, 'logout']);
     
-    Route::get('/', [HomeController::class, 'index']);
 
     Route::get('/users', [UserController::class, 'index']);
 
