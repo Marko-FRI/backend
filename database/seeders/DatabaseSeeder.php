@@ -54,7 +54,7 @@ class DatabaseSeeder extends Seeder
         }
 
         //generacija kategorij
-        $categories = ['Vse', 'Hitra hrana', 'Jedi z žara', 'Morske jedi', 'Veganske jedi', 'Solatne jedi'];
+        $categories = ['Hitra hrana', 'Jedi z žara', 'Morske jedi', 'Veganske jedi', 'Solatne jedi'];
         for ($i=0; $i < count($categories); $i++) { 
             Category::factory(1)->create([
                 'name' => $categories[$i]
@@ -88,7 +88,7 @@ class DatabaseSeeder extends Seeder
         }
 
         //generacija restavracij
-        Restaurant::factory(5)->create()->each(function ($restaurant) {
+        Restaurant::factory(25)->create()->each(function ($restaurant) {
             //generacija slik
             Restaurant_image::factory(rand(0,5))->create([
                 'id_restaurant' => $restaurant->id_restaurant
@@ -156,7 +156,7 @@ class DatabaseSeeder extends Seeder
         });
 
         //generacija mnenja
-        for ($i=0; $i < rand(0,15); $i++) {
+        for ($i=0; $i < rand(15,45); $i++) {
             do {
                 $id_restaurant = Restaurant::all()->random()->id_restaurant;
                 $id_user = User::all()->random()->id_user;
