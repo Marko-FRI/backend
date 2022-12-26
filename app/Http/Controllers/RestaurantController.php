@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 
+use Carbon\Carbon;
+
 use App\Models\Restaurant;
 use App\Models\Per_day_schedule;
 use App\Models\Review;
@@ -22,13 +24,14 @@ class RestaurantController extends Controller
 
         $num_of_ratings = Review::where('id_restaurant', $request->id)->count();
 
-        $num_of_reviews = $restaurant->$reviews->count();
+        $num_of_reviews = $restaurant->reviews()->count();
         $reviews = $restaurant->reviews()
                               ->select('id_user', 'id_review', 'comment', 'rating', 'updated_at')
                               ->orderBy('updated_at', 'desc')->paginate(4);
         
         $url = URL::to('/') . '/images/profile_images/';
         
+        Carbon::setLocale('sl');
         foreach ($reviews as $review) {
             $user = $review->user();
 
@@ -60,8 +63,6 @@ class RestaurantController extends Controller
         }
 
         $url = URL::to('/') . '/images/menu_images/';
-
-        
 
         foreach ($menus as $menu) {
             $menu->image_path = $url . $menu->image_path;
