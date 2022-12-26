@@ -63,7 +63,7 @@ class RestaurantController extends Controller
         
 
         foreach ($menus as $menu) {
-            $menu->image_path = $usl . $menu->image_path;
+            $menu->image_path = $url . $menu->image_path;
             $alergens = Alergen::join('food_has_alergens', 'alergens.id_alergen', '=', 'food_has_alergens.id_alergen')
                             ->join('food', 'food_has_alergens.id_food', '=', 'food.id_food')
                             ->join('restaurant_has_food', 'food.id_food', '=', 'restaurant_has_food.id_food')
