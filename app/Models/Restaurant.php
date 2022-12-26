@@ -28,7 +28,17 @@ class Restaurant extends Model
         'id_user',
         'name',
         'description',
-        'address'
+        'address',
+        'email',
+        'phone_number',
+        'facebook_link',
+        'instagram_link',
+        'twitter_link'
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at'
     ];
 
     /**
@@ -121,9 +131,9 @@ class Restaurant extends Model
         return $this->hasMany(Menu::class, 'id_restaurant', 'id_restaurant');
     }
     
-    /*
+    
     public function average_rating() {
         return Review::where('id_restaurant', $this->attributes["id_restaurant"])->avg('rating');
     }
-    */
+    
 }

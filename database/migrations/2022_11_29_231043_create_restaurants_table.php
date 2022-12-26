@@ -19,6 +19,12 @@ class CreateRestaurantsTable extends Migration
             $table->string('name', 1024);
             $table->string('address', 1024);
             $table->string('description', 1024)->nullable();
+            $table->string('email', 1024);
+            $table->string('phone_number', 1024);
+            $table->string('facebook_link', 1024);
+            $table->string('instagram_link', 1024);
+            $table->string('twitter_link', 1024);
+
             $table->timestamps();
         });
     }

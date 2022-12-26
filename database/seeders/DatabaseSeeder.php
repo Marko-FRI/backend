@@ -37,13 +37,13 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         //generacija uporabnikov
-        User::factory(10)->create();
+        User::factory(15)->create();
 
         //generacija hrane
-        Food::factory(20)->create();
+        Food::factory(30)->create();
 
         //generacija alergenov
-        Alergen::factory(5)->create();
+        Alergen::factory(8)->create();
 
         //generacija hrana ima alergene
         for ($i=0; $i < 10; $i++) { 
@@ -70,10 +70,10 @@ class DatabaseSeeder extends Seeder
         }
 
         //generacija pijač
-        Drink::factory(10)->create();
+        Drink::factory(20)->create();
 
         //generacija pijača ima volumne 
-        for ($i=0; $i < 15; $i++) {              
+        for ($i=0; $i < 30; $i++) {              
             do {
                 $id_volume = Volume::all()->random()->id_volume;
                 $id_drink = Drink::all()->random()->id_drink;
@@ -109,7 +109,7 @@ class DatabaseSeeder extends Seeder
                 'id_restaurant' => $restaurant->id_restaurant
             ]);
 
-            for ($i=0; $i < rand(8,15); $i++) {
+            for ($i=0; $i < rand(10,15); $i++) {
                 //generacija restavracija ima hrano
                 do {
                     $id_food = Food::all()->random()->id_food;
@@ -135,7 +135,7 @@ class DatabaseSeeder extends Seeder
             }
 
             //generacija restavracija ima menuje
-            Menu::factory(rand(5,10))->create([
+            Menu::factory(rand(10,15))->create([
                 'id_restaurant' => $restaurant->id_restaurant,
                 'id_category' => Category::all()->random()->id_category
             ])->each(function ($menu) use($restaurant) {
@@ -155,8 +155,8 @@ class DatabaseSeeder extends Seeder
             });
         });
 
-        //generacija mnenja
-        for ($i=0; $i < rand(15,45); $i++) {
+        //generacija mnenj
+        for ($i=0; $i < rand(40,55); $i++) {
             do {
                 $id_restaurant = Restaurant::all()->random()->id_restaurant;
                 $id_user = User::all()->random()->id_user;
@@ -171,7 +171,7 @@ class DatabaseSeeder extends Seeder
         }
 
         //generacija najljubših
-        for ($i=0; $i < rand(10,15); $i++) {
+        for ($i=0; $i < rand(15,25); $i++) {
             do {
                 $id_restaurant = Restaurant::all()->random()->id_restaurant;
                 $id_user = User::all()->random()->id_user;
@@ -186,7 +186,7 @@ class DatabaseSeeder extends Seeder
         }
 
         //generacija rezervacij
-        Reservation::factory(10)->create()->each(function ($reservation) {
+        Reservation::factory(20)->create()->each(function ($reservation) {
             //generacija izbranih menijev v rezervaciji
             Selected_menu::factory($reservation->number_of_personel)->create([
                 'id_reservation' => $reservation->id_reservation,
