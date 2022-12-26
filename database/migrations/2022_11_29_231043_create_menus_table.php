@@ -17,7 +17,8 @@ class CreateMenusTable extends Migration
             $table->increments('id_menu')->unique('menus_pk');
             $table->bigInteger('id_restaurant')->index('restaurant_has_menu_fk');
             $table->bigInteger('id_category')->references('id_category')->on('categories')->onUpdate('CASCADE')->onDelete('RESTRICT');
-            $table->string('image_path', 1024)->nullable();
+            $table->string('name', 1024)->nullable(false);
+            $table->string('image_path', 1024)->nullable(false);
             $table->float('price', 0, 0);
             $table->string('description', 1024)->nullable();
             $table->integer('discount')->nullable();

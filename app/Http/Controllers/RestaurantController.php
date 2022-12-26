@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 use App\Models\Restaurant;
 use App\Models\Per_day_schedule;
@@ -25,27 +26,30 @@ class RestaurantController extends Controller
                               ->select('id_user', 'id_review', 'comment', 'rating', 'updated_at')
                               ->orderBy('updated_at', 'desc')->paginate(4);
         
+        $url = URL::to('/') . '/images/profile_images/';
         
         foreach ($reviews as $review) {
             $user = $review->user();
 
             $review->name = $user->pluck('name')[0];
             $review->surname = $user->pluck('surname')[0];
-            $review->profile_image = $user->pluck('profile_image_path')[0];
+            $review->profile_image = $url . $user->pluck('profile_image_path')[0];
             $review->time_ago = $review->updated_at->diffForHumans();
         }
         
+        $url = URL::to('/') . '/images/restaurant_images/';
+
         $i=0;
         $images = [];
         foreach ($restaurant->images()->get(['image_path'])->toArray() as $image) {
-            $images[$i] = $image['image_path'];
+            $images[$i] = $url . $image['image_path'];
             $i++;
         }
         $restaurant->images = $images;
         $restaurant->rating = $restaurant->average_rating();
 
         $num_of_menus = $restaurant->menus()->count();
-        $menus = $restaurant->menus()->select('id_menu', 'image_path', 'price', 'description', 'discount')->orderBy('price', 'desc')->paginate(6);
+        $menus = $restaurant->menus()->select('id_menu', 'name', 'image_path', 'price', 'description', 'discount')->orderBy('price', 'desc')->paginate(6);
         $schedule = $restaurant->schedule()->get(['start_of_shift', 'end_of_shift', 'day', 'note', ]);
 
         for ($i=0; $i < 7; $i++) { 
@@ -54,7 +58,10 @@ class RestaurantController extends Controller
             }
         }
 
+        $url = URL::to('/') . '/images/menu_images/';
+
         foreach ($menus as $menu) {
+            $menu->image_path = $usl . $menu->image_path;
             $alergens = Alergen::join('food_has_alergens', 'alergens.id_alergen', '=', 'food_has_alergens.id_alergen')
                             ->join('food', 'food_has_alergens.id_food', '=', 'food.id_food')
                             ->join('restaurant_has_food', 'food.id_food', '=', 'restaurant_has_food.id_food')
