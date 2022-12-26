@@ -22,8 +22,9 @@ class RestaurantController extends Controller
         $num_of_ratings = Review::where('id_restaurant', $request->id)->count();
 
         $reviews = $restaurant->reviews()
-                              ->select('id_review', 'comment', 'rating', 'updated_at')
+                              ->select('id_user', 'id_review', 'comment', 'rating', 'updated_at')
                               ->orderBy('updated_at', 'desc')->paginate(4);
+        
         
         foreach ($reviews as $review) {
             $user = $review->user();
@@ -46,6 +47,12 @@ class RestaurantController extends Controller
         $num_of_menus = $restaurant->menus()->count();
         $menus = $restaurant->menus()->select('id_menu', 'image_path', 'price', 'description', 'discount')->orderBy('price', 'desc')->paginate(6);
         $schedule = $restaurant->schedule()->get(['start_of_shift', 'end_of_shift', 'day', 'note', ]);
+
+        for ($i=0; $i < 7; $i++) { 
+            if(!isset($schedule[$i])) {
+                $schedule[$i] = "/";
+            }
+        }
 
         foreach ($menus as $menu) {
             $alergens = Alergen::join('food_has_alergens', 'alergens.id_alergen', '=', 'food_has_alergens.id_alergen')
