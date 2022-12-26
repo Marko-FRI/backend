@@ -22,6 +22,7 @@ class RestaurantController extends Controller
 
         $num_of_ratings = Review::where('id_restaurant', $request->id)->count();
 
+        $num_of_reviews = $restaurant->$reviews->count();
         $reviews = $restaurant->reviews()
                               ->select('id_user', 'id_review', 'comment', 'rating', 'updated_at')
                               ->orderBy('updated_at', 'desc')->paginate(4);
@@ -87,6 +88,7 @@ class RestaurantController extends Controller
             'reviews' => $reviews,
             'numMenus' => $num_of_menus,
             'numRatings' => $num_of_ratings,
+            'numReviews' => $num_of_reviews
         ];
 
         return $response;
