@@ -60,7 +60,7 @@ class RestaurantController extends Controller
 
         $url = URL::to('/') . '/images/menu_images/';
 
-        dd($menus->toArray());
+        
 
         foreach ($menus as $menu) {
             $menu->image_path = $usl . $menu->image_path;
