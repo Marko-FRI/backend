@@ -60,6 +60,8 @@ class RestaurantController extends Controller
 
         $url = URL::to('/') . '/images/menu_images/';
 
+        dd($menus->toArray());
+
         foreach ($menus as $menu) {
             $menu->image_path = $usl . $menu->image_path;
             $alergens = Alergen::join('food_has_alergens', 'alergens.id_alergen', '=', 'food_has_alergens.id_alergen')
