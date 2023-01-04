@@ -6,16 +6,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasCompositePrimaryKeyTrait;
 
 use App\Models\Restaurant;
 use App\Models\User;
 
 class Review extends Model
 {
-    use HasFactory;
+    use HasFactory, HasCompositePrimaryKeyTrait;
 
     protected $table = 'reviews';
-    protected $primaryKey = 'id_review';
+    protected $primaryKey = ['id_user', 'id_restaurant'];
 
     protected $fillable = [
         'id_user',

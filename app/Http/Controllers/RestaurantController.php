@@ -11,25 +11,23 @@ use App\Models\Restaurant;
 use App\Models\Per_day_schedule;
 use App\Models\Review;
 use App\Models\Menu;
-use App\Models\Menu_has_food;
-use App\Models\Restaurant_has_food;
-use App\Models\Food;
-use App\Models\Food_has_alergen;
+use App\Models\Favourite;
+use App\Models\Menu_has_alergen;
 use App\Models\Alergen;
 
 class RestaurantController extends Controller
 {
-    public function get_single_restaurant(Request $request) {
+    public function index(Request $request) {
         $restaurant = Restaurant::find($request->id);
 
         $num_of_ratings = Review::where('id_restaurant', $request->id)->count();
 
         $num_of_reviews = $restaurant->reviews()->count();
         $reviews = $restaurant->reviews()
-                              ->select('id_user', 'id_review', 'comment', 'rating', 'updated_at')
-                              ->orderBy('updated_at', 'desc')->paginate(4);
+                              ->select('id_user', 'id_restaurant', 'comment', 'rating', 'updated_at')
+                              ->orderBy('updated_at', 'desc')->take(4)->get();
         
-        $url = URL::to('/') . '/images/profile_images/';
+        $url = URL::to('/') . '/images/user_images/';
         
         Carbon::setLocale('sl');
         foreach ($reviews as $review) {
@@ -52,6 +50,16 @@ class RestaurantController extends Controller
         $restaurant->images = $images;
         $restaurant->rating = $restaurant->average_rating();
 
+        if (auth('sanctum')->user() != null) {
+            $current_user_id = auth('sanctum')->user()->id_user;
+
+            $restaurant->isFavourited = $this->is_favourited($current_user_id, $restaurant->id_restaurant);
+
+            $review = Review::where('id_restaurant', $restaurant->id_restaurant)->where('id_user', $current_user_id)->get(['rating', 'comment']);
+            
+            $restaurant->userReview = isset($review[0]) ? $review[0] : NULL;
+        }
+
         $num_of_menus = $restaurant->menus()->count();
         $menus = $restaurant->menus()->select('id_menu', 'name', 'image_path', 'price', 'description', 'discount')->orderBy('price', 'desc')->paginate(6);
         $schedule = $restaurant->schedule()->get(['start_of_shift', 'end_of_shift', 'day', 'note', ]);
@@ -66,16 +74,12 @@ class RestaurantController extends Controller
 
         foreach ($menus as $menu) {
             $menu->image_path = $url . $menu->image_path;
-            $alergens = Alergen::join('food_has_alergens', 'alergens.id_alergen', '=', 'food_has_alergens.id_alergen')
-                            ->join('food', 'food_has_alergens.id_food', '=', 'food.id_food')
-                            ->join('restaurant_has_food', 'food.id_food', '=', 'restaurant_has_food.id_food')
-                            ->join('menu_has_food', 'restaurant_has_food.id_restaurant_has_food', '=', 'menu_has_food.id_restaurant_has_food')
-                            ->where('menu_has_food.id_menu', $menu->id_menu)->get(['alergens.name'])->toArray();
+            $alergens = $menu->alergens()->get();
 
             $alergens_new = [];
             $i=0;
             foreach ($alergens as $alergen) {
-                $alergens_new[$i] = $alergen['name'];
+                $alergens_new[$i] = $alergen->alergen()->get(['name'])->pluck('name')[0];
                 $i++;
             }
             
@@ -83,7 +87,7 @@ class RestaurantController extends Controller
         }
 
         $response = [
-            'restaurant_data' => $restaurant, //->get(['id_restaurant', 'id_user', 'name', 'address', 'description', 'email', 'phone_number', 'facebook_link', 'instagram_link', 'twitter_link']),
+            'restaurant_data' => $restaurant,
             'menus' => $menus,
             'schedule' => $schedule,
             'reviews' => $reviews,
@@ -93,5 +97,11 @@ class RestaurantController extends Controller
         ];
 
         return $response;
+    }
+
+    function is_favourited($id_user, $id_restaurant) {
+        if (Favourite::where('id_user', $id_user)->where('id_restaurant', $id_restaurant)->first())
+            return true;
+        return false;
     }
 }

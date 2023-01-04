@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
@@ -16,17 +18,6 @@ use App\Models\Drink;
 
 class UserController extends Controller
 {
-    public function test() {
-        //$sel = Restaurant::find(1);
-
-        //dd($sel->images()->get());
-        //dd($sel->tables()->get());
-    }
-
-    public function index() {
-        return User::all();
-    }
-
     //----------- login -----------
     public function login(Request $request) {
         //Log::info($request->input());
@@ -36,6 +27,9 @@ class UserController extends Controller
  
         if ($user && Hash::check($request->password, $user->password) ) {
             $message = "You have been succesfully logged in.";
+
+            $url = URL::to('/') . '/images/user_images/';
+            $user->profile_image_path = $url . $user->profile_image_path;
 
             $token = $user->createToken('web-token')->plainTextToken;
         } else {
@@ -50,9 +44,11 @@ class UserController extends Controller
         ];
 
         if ($token == "")
-            return Response::json($response, 401);
+            return abort(401, $message);
+        //    return Response::json($response, 401);
         
-        return Response::json($response, 200);
+        //return Response::json($response, 200);
+        return $response;
     }
 
     function validateUserCredentialsForLogin($request) {
@@ -74,7 +70,7 @@ class UserController extends Controller
     //----------- register -----------
     public function register(Request $request) {
         $this->validateUserCredentialsForRegister($request);
-
+        
         try {
             $user = new User();
             $user->email = $request->email;
@@ -84,6 +80,9 @@ class UserController extends Controller
             $user->profile_image_path = 'profile.jpg';
             $user->remember_token = Str::random(12);
             $user->save();
+
+            $url = URL::to('/') . '/images/user_images/';
+            $user->profile_image_path = $url . $user->profile_image_path;
 
             $message = "You have been succesfully registered.";
             $token = $user->createToken('web-token')->plainTextToken;
@@ -99,7 +98,8 @@ class UserController extends Controller
             'userData' => $user
         ];
 
-        return Response::json($response, 200);
+        //return Response::json($response, 200);
+        return $response;
     }
 
     function validateUserCredentialsForRegister(Request $request) {
@@ -152,5 +152,9 @@ class UserController extends Controller
         ];
 
         return $response;
+    }
+
+    public function getData(Request $request) {
+        
     }
 }
