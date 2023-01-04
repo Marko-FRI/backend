@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\DB;
 
 use Carbon\Carbon;
-use Auth;
-use Guard;
+//use Auth;
+//use Guard;
 use Laravel\Sanctum\PersonalAccessToken;
 
 use App\Models\Restaurant;
@@ -83,7 +83,7 @@ class HomeController extends Controller
             
             $restaurant->is_open = $this->is_open($restaurant->schedule()->get());
 
-            //$restaurant->is_favourited = $this->is_favourited(Auth::guard('sanctum')->user()->id_user, $restaurant->id_restaurant);
+            //$restaurant->is_favourited = $this->is_favourited(auth('sanctum')->user()->id_user, $restaurant->id_restaurant);
         }
 
         $response = [
@@ -126,6 +126,7 @@ class HomeController extends Controller
         }
     }
 
+    // za zbrisat ce bo v RestaurantController
     function is_favourited($id_user, $id_restaurant) {
         if (Favourite::where('id_user', $id_user)->where('id_restaurant', $id_restaurant)->first())
             return true;

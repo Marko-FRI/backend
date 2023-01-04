@@ -14,9 +14,7 @@ class Table extends Model
 
     protected $fillable = [
         'id_restaurant',
-        'description',
-        'number_of-seats'
+        'number_of_seats',
+        'description'
     ];
-
-    
 }

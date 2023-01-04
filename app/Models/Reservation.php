@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Reservation_has_table;
+use App\Models\Table;
 use App\Models\Selected_menu;
 
 class Reservation extends Model
@@ -19,17 +19,20 @@ class Reservation extends Model
 
     protected $fillable = [
         'id_user',
-        'number_of_personel'
+        'id_table',
+        'number_of_personel',
+        'date_and_time_of_reservation',
+        'note'
     ];
 
     /**
-     * Get all of the tables for the Reservation
+     * Get the table associated with the Reservation
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function tables(): HasMany
+    public function table(): HasOne
     {
-        return $this->hasMany(Reservation_has_table::class, 'id_reservation', 'id_reservation');
+        return $this->hasOne(Table::class, 'id_table', 'id_table');
     }
 
     /**

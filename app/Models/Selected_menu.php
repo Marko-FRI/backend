@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Restaurant_has_drink;
 use App\Models\Reservation;
 
 class Selected_menu extends Model
@@ -19,21 +18,10 @@ class Selected_menu extends Model
     protected $primaryKey = 'id_selected_menu';
 
     protected $fillable = [
-        'id_restaurant_has_drink',
         'id_reservation',
         'id_menu',
-        'note'
+        'quantity'
     ];
-
-    /**
-     * Get the restaurant_has_drink associated with the Selected_menu
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function restaurant_has_drink(): HasOne
-    {
-        return $this->hasOne(Restaurant_has_drink::class, 'id_restaurant_has_drink', 'id_restaurant_has_drink');
-    }
 
     /**
      * Get the menu that owns the Selected_menu
