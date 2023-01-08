@@ -119,7 +119,7 @@ class Controller extends BaseController
     public function validateInteger(Request $request) {
         $message = "Request sent data must be number";
 
-        if ($request->has('id_restaurant') && !is_numeric($request->id_restarant)) return abort(403, "Id restaurant mut be a number");
+        if ($request->has('id_restaurant') && !is_numeric($request->id_restaurant)) return abort(403, "Id restaurant mut be a number");
         if ($request->has('commentOffset') && !is_numeric($request->commentOffset)) return abort(403, "commentOffset must be a number");
         if ($request->has('reservationOffset') && !is_numeric($request->reservationOffset)) return abort(403, "reservationOffset must be a number");
         if ($request->has('reviewOffset') && !is_numeric($request->reviewOffset)) return abort(403, "reviewOffset must be a number");
