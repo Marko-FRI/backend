@@ -43,7 +43,7 @@ class ReviewController extends Controller
             $message = $ex->getMessage();
         }
 
-        $restaurant = Restaurant::find($request->id_restaurant);
+        $restaurant = Restaurant::where('id_restaurant', $request->id_restaurant)->first();
 
         $rating = $restaurant->average_rating();
 
@@ -53,15 +53,13 @@ class ReviewController extends Controller
                               ->select('id_user', 'id_restaurant', 'comment', 'rating', 'updated_at')
                               ->orderBy('updated_at', 'desc')->take($request->commentOffset)->get();
 
-        $url = URL::to('/') . '/images/user_images/';
-
         Carbon::setLocale('sl');
         foreach ($reviews as $review) {
             $user = $review->user();
 
             $review->name = $user->pluck('name')[0];
             $review->surname = $user->pluck('surname')[0];
-            $review->profile_image = $url . $user->pluck('profile_image_path')[0];
+            $review->profile_image = $this->USER_IMAGES_URL . $user->pluck('profile_image_path')[0];
             $review->time_ago = $review->updated_at->diffForHumans();
         }
 
@@ -95,13 +93,11 @@ class ReviewController extends Controller
     }
 
     function moreReviews(Request $request) {
-        $restaurant = Restaurant::find($request->id_restaurant);
+        $restaurant = Restaurant::where('id_restaurant', $request->id_restaurant)->first();
 
         $reviews = $restaurant->reviews()
                               ->select('id_user', 'id_review', 'comment', 'rating', 'updated_at')
                               ->orderBy('updated_at', 'desc')->take($request->commentOffset)->get();
-
-        $url = URL::to('/') . '/images/profile_images/';
 
         Carbon::setLocale('sl');
         foreach ($reviews as $review) {
@@ -109,7 +105,7 @@ class ReviewController extends Controller
 
             $review->name = $user->pluck('name')[0];
             $review->surname = $user->pluck('surname')[0];
-            $review->profile_image = $url . $user->pluck('profile_image_path')[0];
+            $review->profile_image = $this->USER_IMAGES_URL . $user->pluck('profile_image_path')[0];
             $review->time_ago = $review->updated_at->diffForHumans();
         }
 
