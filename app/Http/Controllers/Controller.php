@@ -120,6 +120,8 @@ class Controller extends BaseController
         $message = "Request sent data must be number";
 
         if ($request->has('id_restaurant') && !is_numeric($request->id_restaurant)) return abort(403, "Id restaurant must be a number");
+        if ($request->has('id_reservation') && !is_numeric($request->id_reservation)) return abort(403, "Id reservation must be a number");
+        
         if ($request->has('commentOffset') && !is_numeric($request->commentOffset)) return abort(403, "commentOffset must be a number");
         if ($request->has('reservationOffset') && !is_numeric($request->reservationOffset)) return abort(403, "reservationOffset must be a number");
         if ($request->has('reviewOffset') && !is_numeric($request->reviewOffset)) return abort(403, "reviewOffset must be a number");
