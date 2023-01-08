@@ -34,7 +34,7 @@ Route::get('/homePageMoreReviews', [HomeController::class, 'moreReviews']);
 Route::get('/restaurantsFirstLoad', [HomeController::class, 'restaurantsFirstLoad']);
 Route::get('/restaurants', [HomeController::class, 'filtered']);
 
-Route::get('/restaurant/{id}', [RestaurantController::class, 'index'])->where('id', '[0-9]+');
+Route::get('/restaurant/{id_restaurant}', [RestaurantController::class, 'index'])->where('id', '[0-9]+');
 
 Route::get('/moreReviews', [ReviewController::class, 'moreReviews']);
 

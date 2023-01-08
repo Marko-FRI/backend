@@ -93,6 +93,8 @@ class ReservationController extends Controller
     }
 
     function validateReservationCredentials(Request $request) {
+        $this->validateInteger($request);
+
         $max_seats = Restaurant::where('id_restaurant', $request->id_restaurant)->first()->tables()->max('number_of_seats');
 
         $after = Carbon::createFromFormat('Y-m-d H:i:s', now())->addHours(12);
@@ -160,6 +162,8 @@ class ReservationController extends Controller
     }
 
     function availableWithinSchedule(Request $request) {
+        $this->validateInteger($request);
+
         $restaurant = Restaurant::where('id_restaurant', $request->id_restaurant)->first();
 
         $reservationDateTime = Carbon::createFromFormat('Y-m-d H:i:s', $request->dateTime);
@@ -179,6 +183,8 @@ class ReservationController extends Controller
     }
 
     public function deleteReservation(Request $request) {
+        $this->validateInteger($request);
+
         Reservation::where('id_reservation', $request->id_reservation)->delete()->first();
 
         $id_user = auth('sanctum')->user()->id_user;

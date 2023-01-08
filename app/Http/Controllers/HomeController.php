@@ -18,6 +18,8 @@ use App\Models\Review;
 class HomeController extends Controller
 {
     public function index(Request $request) {
+        $this->validateInteger($request);
+
         $reviews = $this->getReviews($request->reviewOffset);
 
         $restaurants = Restaurant::select('restaurants.id_restaurant', 'restaurants.name', 'restaurants.description')

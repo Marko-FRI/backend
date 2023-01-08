@@ -18,9 +18,11 @@ use App\Models\Alergen;
 class RestaurantController extends Controller
 {
     public function index(Request $request) {
-        $restaurant = Restaurant::where('id_restaurant', $request->id)->first();
+        $this->validateInteger($request);
 
-        $num_of_ratings = Review::where('id_restaurant', $request->id)->count();
+        $restaurant = Restaurant::where('id_restaurant', $request->id_restaurant)->first();
+
+        $num_of_ratings = Review::where('id_restaurant', $request->id_restaurant)->count();
 
         $num_of_reviews = $restaurant->reviews()->count();
         $reviews = $restaurant->reviews()

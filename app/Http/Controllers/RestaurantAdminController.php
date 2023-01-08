@@ -13,13 +13,9 @@ use App\Models\Table;
 class RestaurantAdminController extends Controller
 {
     public function index(Request $request) {
-        //$id_restaurant = auth('sanctum')->user()->id_restaurant;
+        $this->validateInteger($request);
+
         $id_restaurant = $request->id_restaurant;
-        
-        //dd(auth('sanctum')->user());
-        if ($id_restaurant == null) {
-            return abort(401);
-        }
 
         $tables = Table::where('id_restaurant', $id_restaurant)->pluck('id_table')->toArray();
 
@@ -52,9 +48,9 @@ class RestaurantAdminController extends Controller
     }
 
     public function moreAdminActiveReservations(Request $request) {
-        $id_restaurant = $request->id_restaurant;
+        $this->validateInteger($request);
 
-        $tables = Table::where('id_restaurant', $id_restaurant)->pluck('id_table')->toArray();
+        $tables = Table::where('id_restaurant', $request->id_restaurant)->pluck('id_table')->toArray();
 
         $activeReservations = $this->getActiveReservations($tables, $request->reservationOffset);
 
@@ -68,9 +64,9 @@ class RestaurantAdminController extends Controller
     }
 
     public function moreAdminPastReservations(Request $request) {
-        $id_restaurant = $request->id_restaurant;
+        $this->validateInteger($request);
 
-        $tables = Table::where('id_restaurant', $id_restaurant)->pluck('id_table')->toArray();
+        $tables = Table::where('id_restaurant', $request->id_restaurant)->pluck('id_table')->toArray();
 
         $pastReservations = $this->getPastReservations($tables, $request->reservationOffset);
 
@@ -84,11 +80,11 @@ class RestaurantAdminController extends Controller
     }
 
     public function deleteAdminReservation(Request $request) {
-        $id_restaurant = $request->id_restaurant;
+        $this->validateInteger($request);
 
         Reservation::where('id_reservation', $request->id_reservation)->delete();
 
-        $tables = Table::where('id_restaurant', $id_restaurant)->pluck('id_table')->toArray();
+        $tables = Table::where('id_restaurant', $request->id_restaurant)->pluck('id_table')->toArray();
 
         $activeReservations = $this->getActiveReservations($tables, $request->reservationOffset);
 

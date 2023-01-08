@@ -14,6 +14,7 @@ class ReviewController extends Controller
 {
     public function index(Request $request) {
         $this->validateReviewCredentials($request);
+        $this->validateInteger($request);
 
         $id_user = auth('sanctum')->user()->id_user;
 
@@ -93,6 +94,8 @@ class ReviewController extends Controller
     }
 
     function moreReviews(Request $request) {
+        $this->validateInteger($request);
+
         $restaurant = Restaurant::where('id_restaurant', $request->id_restaurant)->first();
 
         $reviews = $restaurant->reviews()

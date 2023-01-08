@@ -8,6 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
 use Illuminate\Support\Facades\URL;
+use Illuminate\Http\Request;
 
 use Carbon\Carbon;
 
@@ -113,5 +114,17 @@ class Controller extends BaseController
                                                         $selected_menu->price = $selected_menu->menu()->pluck('price')->first();
                                                     })->toArray();
         }
+    }
+
+    public function validateInteger(Request $request) {
+
+        $message = "Request sent data must be number";
+
+        if ($request->has('id_restaurant') && !is_int($request->id_restarant)) return abort(403, $message);
+        if ($request->has('commentOffset') && !is_int($request->commentOffset)) return abort(403, $message);
+        if ($request->has('reservationOffset') && !is_int($request->reservationOffset)) return abort(403, $message);
+        if ($request->has('reviewOffset') && !is_int($request->reviewOffset)) return abort(403, $message);
+        if ($request->has('restaurantOffset') && !is_int($request->restaurantOffset)) return abort(403, $message);
+        if ($request->has('categoryOffset') && !is_int($request->categoryOffset)) return abort(403, $message);
     }
 }
