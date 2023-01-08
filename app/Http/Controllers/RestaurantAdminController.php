@@ -17,9 +17,11 @@ class RestaurantAdminController extends Controller
 
         $id_restaurant = $request->id_restaurant;
 
-        $tables = Table::where('id_restaurant', $id_restaurant)->pluck('id_table')->toArray();
-
         $restaurant = Restaurant::where('id_restaurant', $id_restaurant)->first();
+
+        if ($restaurant==null) abort(401, "Not restaurant admin.");
+
+        $tables = Table::where('id_restaurant', $id_restaurant)->pluck('id_table')->toArray();
 
         $restaurantName = $restaurant->name;
         $restaurantUser_id = $restaurant->id_user;
@@ -32,7 +34,7 @@ class RestaurantAdminController extends Controller
         $activeReservations = $this->getActiveReservations($tables, $request->reservationOffset);
         $numOfActiveReservations = $this->getNumberOfActiveReservations($tables);
 
-        $this->addDataToReservations_AdminView($activeReservations);     
+        $this->addDataToReservations_AdminView($activeReservations);
 
         $response = [
             'restaurant_header_image' => $this->PLACEHOLDER_IMAGES_URL . 'restaurant_header_picture.png',

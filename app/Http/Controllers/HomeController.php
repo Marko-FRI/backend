@@ -37,10 +37,10 @@ class HomeController extends Controller
             $restaurant->restaurant_image_path = $restaurant_image == null ? null : $this->RESTAURANT_IMAGES_URL . $restaurant_image->image_path;
         }
 
-        $categories = Category::inRandomOrder()->take($request->categoryOffset)->get();
+        $categories = Category::inRandomOrder()->take($request->categoryOffset)->get()->makeHidden(['created_at', 'updated_at']);
         
         foreach ($categories as $category) {            
-            $category->restaurants = $category->restaurants()->get(['restaurants.id_restaurant', 'restaurants.name', 'restaurants.address'])->unique('id_restaurant')->take($request->categoryRestaurantOffset);
+            $category->restaurants = $category->restaurants()->get(['restaurants.id_restaurant', 'restaurants.name', 'restaurants.address'])->unique('id_restaurant')->take($request->categoryRestaurantOffset)->makeHidden(['laravel_through_key']);
 
             foreach ($category->restaurants as $restaurant) {
                 $restaurant_image = $restaurant->images()->first();
