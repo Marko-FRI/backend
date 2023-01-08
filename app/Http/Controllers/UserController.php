@@ -59,7 +59,7 @@ class UserController extends Controller
 
     function validateUserCredentialsForLogin($request) {
         $rules = [
-            'email' => ['required','email'],
+            'email' => ['required', 'email'],
             'password' => ['required']
         ];
 

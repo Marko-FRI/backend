@@ -68,8 +68,15 @@ class HomeController extends Controller
     }
 
     function getReviews($offset) {
-        $reviews = Review::select('*')->distinct('id_restaurant')->get()->sortByDesc('updated_at')->take($offset);
+        $reviews = Review::select('*')->distinct('id_restaurant')->get()->sortByDesc('updated_at')->take($offset)->makeHidden(['created_at', 'updated_at']);
+        //$reviews = Review::distinct('id_restaurant')->orderBy('updated_at', 'desc')->get()->unique('id_restaurant')->take($offset);
+        /*$newReviews = [];
 
+        foreach ($reviews as $review) {
+            $newReviews[] = $review;
+        }*/
+        //$reviews = Review::all();
+        //dd($reviews);
         foreach ($reviews as $review) {
             $user = $review->user()->first();
 
@@ -85,7 +92,7 @@ class HomeController extends Controller
             $review->restaurant_image_path = $restaurant_image == null ? null : $this->RESTAURANT_IMAGES_URL . $restaurant_image->image_path;
         }
 
-        return $reviews->makeHidden(['created_at', 'updated_at']);
+        return array_values($reviews->toArray());
     }
 
     public function restaurantsFirstLoad() {
