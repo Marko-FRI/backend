@@ -29,22 +29,14 @@ class RestaurantController extends Controller
                               ->select('id_user', 'id_restaurant', 'comment', 'rating', 'updated_at')
                               ->orderBy('updated_at', 'desc')->take(4)->get();
         
-        Carbon::setLocale('sl');
-        foreach ($reviews as $review) {
-            $user = $review->user();
-
-            $review->name = $user->pluck('name')[0];
-            $review->surname = $user->pluck('surname')[0];
-            $review->profile_image = $this->USER_IMAGES_URL . $user->pluck('profile_image_path')[0];
-            $review->time_ago = $review->updated_at->diffForHumans();
-        }
+        $this->addDataToReviews($reviews);
 
         $images = [];
 
         foreach ($restaurant->images()->get(['image_path'])->toArray() as $image) {
             $images[] = $this->RESTAURANT_IMAGES_URL . $image['image_path'];
         }
-        
+
         $restaurant->images = $images;
         $restaurant->rating = $restaurant->average_rating();
 

@@ -54,15 +54,7 @@ class ReviewController extends Controller
                               ->select('id_user', 'id_restaurant', 'comment', 'rating', 'updated_at')
                               ->orderBy('updated_at', 'desc')->take($request->commentOffset)->get();
 
-        Carbon::setLocale('sl');
-        foreach ($reviews as $review) {
-            $user = $review->user();
-
-            $review->name = $user->pluck('name')[0];
-            $review->surname = $user->pluck('surname')[0];
-            $review->profile_image = $this->USER_IMAGES_URL . $user->pluck('profile_image_path')[0];
-            $review->time_ago = $review->updated_at->diffForHumans();
-        }
+        $this->addDataToReviews($reviews);
 
         $response = [
             'message' => $message,
@@ -102,15 +94,7 @@ class ReviewController extends Controller
                               ->select('id_user', 'id_review', 'comment', 'rating', 'updated_at')
                               ->orderBy('updated_at', 'desc')->take($request->commentOffset)->get();
 
-        Carbon::setLocale('sl');
-        foreach ($reviews as $review) {
-            $user = $review->user();
-
-            $review->name = $user->pluck('name')[0];
-            $review->surname = $user->pluck('surname')[0];
-            $review->profile_image = $this->USER_IMAGES_URL . $user->pluck('profile_image_path')[0];
-            $review->time_ago = $review->updated_at->diffForHumans();
-        }
+        $this->addDataToReviews($reviews);
 
         $response = [
             'reviews' => $reviews
