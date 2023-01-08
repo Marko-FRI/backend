@@ -19,7 +19,7 @@ class RestaurantAdminController extends Controller
 
         $restaurant = Restaurant::where('id_restaurant', $id_restaurant)->first();
 
-        if ($restaurant==null) abort(401, "Not restaurant admin.");
+        if ($restaurant==null) return abort(401, "Not restaurant admin.");
 
         $tables = Table::where('id_restaurant', $id_restaurant)->pluck('id_table')->toArray();
 

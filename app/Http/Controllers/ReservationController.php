@@ -185,7 +185,7 @@ class ReservationController extends Controller
     public function deleteReservation(Request $request) {
         $this->validateInteger($request);
 
-        Reservation::where('id_reservation', $request->id_reservation)->delete()->first();
+        Reservation::where('id_reservation', $request->id_reservation)->delete();
 
         $id_user = auth('sanctum')->user()->id_user;
 
