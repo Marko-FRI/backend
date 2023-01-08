@@ -51,7 +51,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/favourite', [FavouriteController::class, 'index']);
 
     Route::get('/profile', [UserController::class, 'getUserData']);
-    Route::post('/deleteReservation', [ReservationController::class, 'deleteReservation']);
+    Route::delete('/deleteReservation', [ReservationController::class, 'deleteReservation']);
 
     Route::get('/moreActiveReservations', [UserController::class, 'loadMoreActiveReservations']);
     Route::get('/morePastReservations', [UserController::class, 'loadMorePastReservations']);
@@ -63,5 +63,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/adminRestaurantData', [RestaurantAdminController::class, 'index']);
     Route::get('/moreAdminActiveReservations', [RestaurantAdminController::class, 'moreAdminActiveReservations']);
     Route::get('/moreAdminPastReservations', [RestaurantAdminController::class, 'moreAdminPastReservations']);
-    Route::post('/deleteAdminReservation', [RestaurantAdminController::class, 'deleteAdminReservation']);
+    Route::delete('/deleteAdminReservation', [RestaurantAdminController::class, 'deleteAdminReservation']);
 });
