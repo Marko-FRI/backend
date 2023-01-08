@@ -18,7 +18,7 @@ use App\Models\Alergen;
 class RestaurantController extends Controller
 {
     public function index(Request $request) {
-        $restaurant = Restaurant::find($request->id);
+        $restaurant = Restaurant::where('id_restaurant', $request->id)->first();
 
         $num_of_ratings = Review::where('id_restaurant', $request->id)->count();
 
@@ -27,24 +27,20 @@ class RestaurantController extends Controller
                               ->select('id_user', 'id_restaurant', 'comment', 'rating', 'updated_at')
                               ->orderBy('updated_at', 'desc')->take(4)->get();
         
-        $url = URL::to('/') . '/images/user_images/';
-        
         Carbon::setLocale('sl');
         foreach ($reviews as $review) {
             $user = $review->user();
 
             $review->name = $user->pluck('name')[0];
             $review->surname = $user->pluck('surname')[0];
-            $review->profile_image = $url . $user->pluck('profile_image_path')[0];
+            $review->profile_image = $this->USER_IMAGES_URL . $user->pluck('profile_image_path')[0];
             $review->time_ago = $review->updated_at->diffForHumans();
         }
-        
-        $url = URL::to('/') . '/images/restaurant_images/';
 
         $i=0;
         $images = [];
         foreach ($restaurant->images()->get(['image_path'])->toArray() as $image) {
-            $images[$i] = $url . $image['image_path'];
+            $images[$i] = $this->RESTAURANT_IMAGES_URL . $image['image_path'];
             $i++;
         }
         $restaurant->images = $images;
@@ -70,10 +66,8 @@ class RestaurantController extends Controller
             }
         }
 
-        $url = URL::to('/') . '/images/menu_images/';
-
         foreach ($menus as $menu) {
-            $menu->image_path = $url . $menu->image_path;
+            $menu->image_path = $this->MENU_IMAGES_URL . $menu->image_path;
             $alergens = $menu->alergens()->get();
 
             $alergens_new = [];
@@ -86,6 +80,8 @@ class RestaurantController extends Controller
             $menu->alergens = $alergens_new;
         }
 
+        $restaurant_header_image = $this->PLACEHOLDER_IMAGES_URL . 'restaurant_header_picture.png';
+
         $response = [
             'restaurant_data' => $restaurant,
             'menus' => $menus,
@@ -93,15 +89,12 @@ class RestaurantController extends Controller
             'reviews' => $reviews,
             'numMenus' => $num_of_menus,
             'numRatings' => $num_of_ratings,
-            'numReviews' => $num_of_reviews
+            'numReviews' => $num_of_reviews,
+            'restaurant_header_image' => $restaurant_header_image,
+            'twitter_icon' => $this->APP_IMAGES_URL. 'twitter_green.png',
+            'instagram_icon' => $this->APP_IMAGES_URL. 'instagram_green.png'
         ];
 
         return $response;
-    }
-
-    function is_favourited($id_user, $id_restaurant) {
-        if (Favourite::where('id_user', $id_user)->where('id_restaurant', $id_restaurant)->first())
-            return true;
-        return false;
     }
 }

@@ -2,36 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
+use Carbon\Carbon;
+use App\Models\User;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Response;
+use App\Models\Table;
+
+use App\Models\Favourite;
+use App\Models\Restaurant;
+use App\Models\Reservation;
+use App\Models\Restaurant_has_image;
+
 use Illuminate\Support\Str;
 
-use App\Models\User;
-use App\Models\Restaurant;
-use App\Models\Restaurant_has_image;
-use App\Models\Food;
-use App\Models\Drink;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
 {
     //----------- login -----------
     public function login(Request $request) {
-        //Log::info($request->input());
         $this->validateUserCredentialsForLogin($request);
 
         $user = User::where('email', $request->email)->first();
  
-        if ($user && Hash::check($request->password, $user->password) ) {
-            $message = "You have been succesfully logged in.";
+        if ($user && Hash::check($request->password, $user->password)) {
+            $restaurant = Restaurant::where('id_user', $user->id_user)->first();
 
-            $url = URL::to('/') . '/images/user_images/';
-            $user->profile_image_path = $url . $user->profile_image_path;
+            $user->id_restaurant = $restaurant == null ? null : $restaurant->id_restaurant;
 
+            $user->profile_image_path = $this->USER_IMAGES_URL . $user->profile_image_path;
+            
             $token = $user->createToken('web-token')->plainTextToken;
+
+            $message = "You have been succesfully logged in.";
         } else {
             $message = "Login failed - Please check your email and password again.";
             $token = "";
@@ -81,8 +87,7 @@ class UserController extends Controller
             $user->remember_token = Str::random(12);
             $user->save();
 
-            $url = URL::to('/') . '/images/user_images/';
-            $user->profile_image_path = $url . $user->profile_image_path;
+            $user->profile_image_path = $this->USER_IMAGES_URL . $user->profile_image_path;
 
             $message = "You have been succesfully registered.";
             $token = $user->createToken('web-token')->plainTextToken;
@@ -154,7 +159,236 @@ class UserController extends Controller
         return $response;
     }
 
-    public function getData(Request $request) {
+    public function getUserData(Request $request) {
+        $id_user = auth('sanctum')->user()->id_user;
+
+        $restaurants = Restaurant::select('restaurants.id_restaurant', 'restaurants.name', 'restaurants.address')
+                                ->join('favourites', 'restaurants.id_restaurant', '=', 'favourites.id_restaurant')
+                                ->where('favourites.id_user', $id_user)
+                                ->orderBy('restaurants.name', 'asc');
+                                //->get(['restaurants.id_restaurant', 'restaurants.name', 'restaurants.address']);
+
+        $num_of_restaurants = $restaurants->count();
         
+        $restaurants = $restaurants->paginate(9);
+        
+        foreach ($restaurants as $restaurant) {
+            $image = $restaurant->images()->get()->first();
+            
+            $restaurant->image = $image != null ? $this->RESTAURANT_IMAGES_URL . $image->image_path : null;
+
+            $restaurant->avg_rating = $restaurant->average_rating();
+            
+            $restaurant->is_open = $this->is_open($restaurant->schedule()->get());
+        };
+
+        $pastReservations = $this->getPastReservations($id_user, $request->reservationOffset);
+
+        $numOfPastReservations = $this->getNumberOfPastReservations($id_user);
+
+        $this->addDataToReservations_UserView($pastReservations);
+
+        $activeReservations = $this->getActiveReservations($id_user, $request->reservationOffset);
+
+        $numOfActiveReservations = $this->getNumberOfActiveReservations($id_user);
+
+        if ($activeReservations!=null)
+            $this->addDataToReservations_UserView($activeReservations);
+
+        $response = [
+            'restaurants' => $restaurants,
+            'num_of_restaurants' => $num_of_restaurants,
+            'pastReservations' => $pastReservations,
+            'activeReservations' => $activeReservations,
+            'numOfPastReservations' => $numOfPastReservations,
+            'numOfActiveReservations' => $numOfActiveReservations
+        ];
+
+        return $response;
+    }
+
+    public function loadMoreActiveReservations(Request $request) {
+        $activeReservations = $this->getActiveReservations(auth('sanctum')->user()->id_user, $request->reservationOffset);
+
+        $this->addDataToReservations_UserView($activeReservations);
+
+        $response = [
+            'activeReservations' => $activeReservations
+        ];
+
+        return $response;
+    }
+
+    public function loadMorePastReservations(Request $request) {
+        $pastReservations = $this->getPastReservations(auth('sanctum')->user()->id_user, $request->reservationOffset);
+
+        $this->addDataToReservations_UserView($pastReservations);
+
+        $response = [
+            'pastReservations' => $pastReservations
+        ];
+
+        return $response;
+    }
+
+    public function checkChangeInPassword(Request $request) {
+        $this->validatePasswordChangeCredentials($request);
+
+        $user = auth('sanctum')->user();
+        
+        $isChange = true;
+        
+        if ($user && Hash::check($request->password, $user->password)) {
+            $isChange = false;
+        }
+
+        $response = [
+            'isChange' => $isChange
+        ];
+
+        return $response;
+    }
+
+    function validatePasswordChangeCredentials(Request $request) {
+        $rules = [
+            'password' => ['required_with:password_confirmation', 'min:6', 'confirmed','regex:/[a-z]/', 'regex:/[A-Z]/','regex:/[0-9]/','regex:/[@$!%*#?&_.-]/'],
+            'password_confirmation' => ['same:password']
+        ];
+
+        $errorMessages = [
+            'password.required_with' => 'Password and password confirmation are required.',
+            'password.min' => 'Password needs to contain atleast 6 characters.',
+            'password.confirmed' => 'Password confirmation does not match.',
+            'password.regex' => 'Password must contain at least 1 lower case letter, 1 upper case letter and one special character.',
+
+            'password_confirmation.same' => 'Password confirmation does not match password.'
+        ];
+
+        return $request->validate($rules, $errorMessages);
+    }
+
+    public function editProfileImage(Request $request) {
+        $this->validateNewImageCredentials($request);
+
+        $user = auth('sanctum')->user();
+
+        $imageName = $user->id_user . time().'.'.$request->file->extension();
+        
+        $request->file->move(public_path('images/user_images'), $imageName);
+
+        $user->update(['profile_image_path' => $imageName]);
+
+        $response =  [
+            'imageName' => $this->USER_IMAGES_URL . $imageName
+        ];
+
+        return $response;
+    }
+
+    function validateNewImageCredentials(Request $request) {
+        $rules = [
+            'file' => ['image', 'mimes:jpeg,png,jpg,gif']
+        ];
+
+        $errorMessages = [
+            'file.image' => 'File must be an image.',
+            'file.mimes' => 'Accepted extensions are jpeg, png, jpg and gif.'
+        ];
+
+        return $request->validate($rules, $errorMessages);
+    }
+
+    public function editProfile(Request $request) {
+        $this->validateNewDataCredentials($request);
+
+        $user = auth('sanctum')->user();
+        
+        if ($user && Hash::check($request->current_password, $user->password) ) {
+            
+            $user_db = User::where('id_user', $user->id_user)->first();
+
+            $user_db->update(['name'=>$request->name, 'surname'=>$request->surname]);
+
+            if ($request->password != null)
+                $user_db->update(['password'=>Hash::make($request->password)]);
+
+            $message = "User data updated.";
+        } else {
+            return abort(401, "Invalid password.");
+        }
+
+        $user = User::where('id_user', $user->id_user)->first();
+        
+        $user->profile_image_path = $this->USER_IMAGES_URL . $user->profile_image_path;
+
+        $response = [
+            'message' => $message,
+            'userData' => $user
+        ];
+
+        return $response;
+    }
+
+    function validateNewDataCredentials(Request $request) {
+        $rules = [
+            'name' => ['required', 'min:3', 'max:100', 'regex:/^[a-zA-ZšđčćžŠĐČĆŽ]+$/'],
+            'surname'=> ['required', 'min:3', 'max:100', 'regex:/^[a-zA-ZšđčćžŠĐČĆŽ]+$/'],
+            'password' => ['nullable', 'min:6', 'regex:/[a-z]/', 'regex:/[A-Z]/','regex:/[0-9]/','regex:/[@$!%*#?&_.-]/']
+        ];
+
+        $errorMessages = [
+            'name.required' => 'Name is required.',
+            'name.min' => 'Name needs to contain atleast 3 characters.',
+            'name.max' => 'Name can contain maximum 100 characters.',
+            'name.regex' => 'Name can only contain letters.',
+
+            'surname.required' => 'Surname is required.',
+            'surname.min' => 'Surname needs to contain atleast 3 characters.',
+            'surname.max' => 'Surname can contain maximum 100 characters.',
+            'surname.regex' => 'Surname can only contain letters.',
+
+            'password.min' => 'Password needs to contain atleast 6 characters.',
+            'password.regex' => 'Password must contain at least 1 lower case letter, 1 upper case letter and one special character.',
+        ];
+
+        return $request->validate($rules, $errorMessages);
+    }
+
+    function getPastReservations($id_user, $offset) {
+        $reservations = Reservation::where('id_user', $id_user)
+                                ->where('date_and_time_of_reservation', '<', $this->before)
+                                ->orderBy('date_and_time_of_reservation', 'desc')
+                                ->take($offset)
+                                ->get();
+        
+        foreach($reservations as $reservation)
+            $reservation->id_restaurant = $reservation->restaurant()->first()->id_restaurant;
+
+        return $reservations->makeHidden(['id_table', 'updated_at', 'created_at']);
+    }
+
+    function getNumberOfPastReservations($id_user) {
+        return Reservation::where('id_user', $id_user)
+                            ->where('date_and_time_of_reservation', '<', $this->before)
+                            ->count();
+    }
+
+    function getActiveReservations($id_user, $offset) {
+        $reservations = Reservation::where('id_user', $id_user)
+                                ->where('date_and_time_of_reservation', '>=', $this->before)
+                                ->orderBy('date_and_time_of_reservation')
+                                ->take($offset)
+                                ->get();
+
+        foreach($reservations as $reservation)
+            $reservation->id_restaurant = $reservation->restaurant()->first()->id_restaurant;
+
+        return $reservations->makeHidden(['id_table', 'updated_at', 'created_at']);
+    }
+
+    function getNumberOfActiveReservations($id_user) {
+        return Reservation::where('id_user', $id_user)
+                            ->where('date_and_time_of_reservation', '>=', $this->before)
+                            ->count();
     }
 }

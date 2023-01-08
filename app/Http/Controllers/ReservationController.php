@@ -36,19 +36,17 @@ class ReservationController extends Controller
             $reservation->number_of_personel = $request->numPersons;
             $reservation->date_and_time_of_reservation = $request->dateTime;
             $reservation->note = $request->note;
-            
+            $reservation->save();
+
             $this->validateMenuCredentials($request);
 
             foreach ($request->pickedMenus as $menu) {
                 $selected_menu = new Selected_menu;
-                
                 $selected_menu->id_reservation = $reservation->id_reservation;
                 $selected_menu->id_menu = $menu['id_menu'];
                 $selected_menu->quantity = $menu['quantity'];
                 $selected_menu->save();
             }
-
-            $reservation->save();
 
             $is_available=true;
             $message = "You have successfuly reserved a table.";
@@ -56,12 +54,12 @@ class ReservationController extends Controller
             $message = "There are no seats available at that time for that amount of personel.";
         }
 
+        if (!$is_available)
+            return abort(401, $message);
+        
         $response = [
             'message' => $message
         ];
-
-        if (!$is_available)
-            return abort(401, $message);
 
         return $response;
     }
@@ -73,13 +71,13 @@ class ReservationController extends Controller
 
         $is_available=false;
         foreach ($available_tables as $table) {
-            if ($request->numPersons<=$table->number_of_seats){
+            if ($request->numPersons<=$table->number_of_seats && $this->availableWithinSchedule($request)) {
                 $is_available=true;
                 break;
             }
         }
 
-        if ($is_available) $message = "You have successfuly reserved a table.";
+        if ($is_available) $message = "Seats are available for reservation.";
         else $message = "There are no seats available at that time for that amount of personel.";
 
         $response = [
@@ -97,7 +95,7 @@ class ReservationController extends Controller
     function validateReservationCredentials(Request $request) {
         $max_seats = Restaurant::where('id_restaurant', $request->id_restaurant)->first()->tables()->max('number_of_seats');
 
-        $after = Carbon::createFromFormat('Y-m-d H:i:s', now())->addDays(1);
+        $after = Carbon::createFromFormat('Y-m-d H:i:s', now())->addHours(12);
         $before = Carbon::createFromFormat('Y-m-d H:i:s', now())->addDays(14);
         
         $rules = [
@@ -108,8 +106,8 @@ class ReservationController extends Controller
         $errorMessages = [
             'dateTime.required' => 'DateTime is required.',
             'dateTime.date_format' => 'DateTime must be in correct format.',
-            'dateTime.after_or_equal' => 'Can reservate after 1 day from now.',
-            'dateTime.before_or_equal' => 'Can reservate before 14 days from now.',
+            'dateTime.after_or_equal' => 'Can only reservate after 12 hours from now.',
+            'dateTime.before_or_equal' => 'Can only reservate before 14 days from now.',
 
             'numPersons.required' => 'Number of persons is required.',
             'numPersons.integer' => 'Number of persons must be a number.',
@@ -159,5 +157,62 @@ class ReservationController extends Controller
                                 ->pluck('reservations.id_table');
 
         return Table::where('id_restaurant', $request->id_restaurant)->whereNotIn('id_table', $used_tables)->orderBy('number_of_seats')->get(['id_table', 'number_of_seats', 'description']);
+    }
+
+    function availableWithinSchedule(Request $request) {
+        $restaurant = Restaurant::where('id_restaurant', $request->id_restaurant)->first();
+
+        $reservationDateTime = Carbon::createFromFormat('Y-m-d H:i:s', $request->dateTime);
+        
+        $dayOfTheWeek = $reservationDateTime->dayOfWeek;
+
+        $schedule = $restaurant->schedule()->get();
+
+        if (isset($schedule[$dayOfTheWeek-1])) {
+            $start_of_shift = Carbon::createFromFormat('Y-m-d H:i:s', explode(" ", $request->dateTime)[0] . $schedule[$dayOfTheWeek-1]->start_of_shift);
+            $end_of_shift = Carbon::createFromFormat('Y-m-d H:i:s', explode(" ", $request->dateTime)[0] . $schedule[$dayOfTheWeek-1]->end_of_shift)->subHours(2);
+            
+            if ($reservationDateTime->gte($start_of_shift) && $reservationDateTime->lte($end_of_shift))
+                return true;
+        }
+        return false;
+    }
+
+    public function deleteReservation(Request $request) {
+        Reservation::where('id_reservation', $request->id_reservation)->delete()->first();
+
+        $id_user = auth('sanctum')->user()->id_user;
+
+        $activeReservations = $this->getActiveReservations($id_user, $request->reservationOffset);
+
+        $numOfActiveReservations = $this->getNumberOfActiveReservations($id_user);
+
+        $this->addDataToReservations_UserView($activeReservations);
+
+        $response = [
+            'activeReservations' => $activeReservations,
+            'numOfActiveReservations' => $numOfActiveReservations
+        ];
+
+        return $response;
+    }
+
+    function getActiveReservations($id_user, $offset) {
+        $reservations = Reservation::where('id_user', $id_user)
+                                ->where('date_and_time_of_reservation', '>=', $this->before)
+                                ->orderBy('date_and_time_of_reservation')
+                                ->take($offset)
+                                ->get();
+
+        foreach($reservations as $reservation)
+            $reservation->id_restaurant = $reservation->restaurant()->first()->id_restaurant;
+
+        return $reservations->makeHidden(['id_table', 'updated_at', 'created_at']);
+    }
+
+    function getNumberOfActiveReservations($id_user) {
+        return Reservation::where('id_user', $id_user)
+                            ->where('date_and_time_of_reservation', '>=', $this->before)
+                            ->count();
     }
 }

@@ -14,7 +14,7 @@ class AddForeignKeysToSelectedMenusTable extends Migration
     public function up()
     {
         Schema::table('selected_menus', function (Blueprint $table) {
-            $table->foreign(['id_reservation'], 'fk_selected_reservati_reservat')->references(['id_reservation'])->on('reservations')->onUpdate('CASCADE');
+            $table->foreign(['id_reservation'], 'fk_selected_reservati_reservat')->references(['id_reservation'])->on('reservations')->onUpdate('CASCADE')->onDelete('CASCADE');;
             $table->foreign(['id_menu'], 'fk_selected_selected__menus')->references(['id_menu'])->on('menus')->onUpdate('CASCADE')->onDelete('RESTRICT');
         });
     }

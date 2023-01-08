@@ -15,7 +15,7 @@ class CreateSelectedMenusTable extends Migration
     {
         Schema::create('selected_menus', function (Blueprint $table) {
             $table->increments('id_selected_menu')->unique('selected_menus_pk');
-            $table->bigInteger('id_reservation')->nullable()->index('reservation_has_selected_menu_fk');
+            $table->bigInteger('id_reservation')->index('reservation_has_selected_menu_fk');
             $table->bigInteger('id_menu')->index('selected_menu_has_menu_fk');
             $table->smallInteger('quantity')->nullable(false);
 
