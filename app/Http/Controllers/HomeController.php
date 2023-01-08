@@ -18,6 +18,7 @@ use App\Models\Review;
 class HomeController extends Controller
 {
     public function index(Request $request) {
+        
         $this->validateInteger($request);
 
         $reviews = $this->getReviews($request->reviewOffset);
