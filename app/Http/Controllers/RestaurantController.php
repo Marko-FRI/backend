@@ -39,12 +39,12 @@ class RestaurantController extends Controller
             $review->time_ago = $review->updated_at->diffForHumans();
         }
 
-        $i=0;
         $images = [];
+
         foreach ($restaurant->images()->get(['image_path'])->toArray() as $image) {
-            $images[$i] = $this->RESTAURANT_IMAGES_URL . $image['image_path'];
-            $i++;
+            $images[] = $this->RESTAURANT_IMAGES_URL . $image['image_path'];
         }
+        
         $restaurant->images = $images;
         $restaurant->rating = $restaurant->average_rating();
 
@@ -73,10 +73,9 @@ class RestaurantController extends Controller
             $alergens = $menu->alergens()->get();
 
             $alergens_new = [];
-            $i=0;
+            
             foreach ($alergens as $alergen) {
-                $alergens_new[$i] = $alergen->alergen()->get(['name'])->pluck('name')[0];
-                $i++;
+                $alergens_new[] = $alergen->alergen()->get(['name'])->pluck('name')[0];
             }
             
             $menu->alergens = $alergens_new;
