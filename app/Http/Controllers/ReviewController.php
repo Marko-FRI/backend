@@ -80,13 +80,13 @@ class ReviewController extends Controller
         ];
 
         $errorMessages = [
-            'rating.required' => 'Rating is required.',
-            'rating.min' => 'Rating must be at least 1.',
-            'rating.max' => 'Rating must be at most 5.',
-            'rating.regex' => 'Rating must be a number between 1 and 5.',
+            'rating.required' => 'Ocena je obvezna.',
+            'rating.min' => 'Ocena je lahko najmanj 1.',
+            'rating.max' => 'Ocena je lahko največ 5.',
+            'rating.regex' => 'Ocena je lahko vključno med 1 in 5.',
 
-            'comment.required' => 'Comment is required.',
-            'comment.max' => 'Comment exceeded given length.'
+            'comment.required' => 'Komentar je obvezen.',
+            'comment.max' => 'Komentar je presegel 1024 znakov.'
         ];
 
         return $request->validate($rules, $errorMessages);

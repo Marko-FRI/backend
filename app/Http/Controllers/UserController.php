@@ -117,26 +117,26 @@ class UserController extends Controller
         ];
 
         $errorMessages = [
-            'name.required' => 'Name is required.',
-            'name.min' => 'Name needs to contain atleast 3 characters.',
-            'name.max' => 'Name can contain maximum 100 characters.',
-            'name.regex' => 'Name can only contain letters.',
+            'name.required' => 'Ime je obvezno.',
+            'name.min' => 'Ime mora vsebovati vsaj 3 črke.',
+            'name.max' => 'Ime lahko vsebuje največ 100 črk.',
+            'name.regex' => 'Ime lahko vsebuje le črke.',
 
-            'surname.required' => 'Surname is required.',
-            'surname.min' => 'Surname needs to contain atleast 3 characters.',
-            'surname.max' => 'Surname can contain maximum 100 characters.',
-            'surname.regex' => 'Surname can only contain letters.',
+            'surname.required' => 'Priimek je obvezen.',
+            'surname.min' => 'Priimek mora vsebovati vsaj 3 črke.',
+            'surname.max' => 'Priimek lahko vsebuje največ 100 črk.',
+            'surname.regex' => 'Priimek lahko vsebuje le črke.',
             
-            'email.required' => 'Email is required.',
-            'email.email' => 'Please enter a valid email.',
-            'email.unique' => 'Email is already in use.',
+            'email.required' => 'Email je obvezen.',
+            'email.email' => 'Prosimo vnesite pravilen email.',
+            'email.unique' => 'Email je že v uporabi.',
 
-            'password.required_with' => 'Password and password confirmation are required.',
-            'password.min' => 'Password needs to contain atleast 6 characters.',
-            'password.confirmed' => 'Password confirmation does not match.',
-            'password.regex' => 'Password must contain at least 1 lower case letter, 1 upper case letter and one special character.',
-
-            'password_confirmation.same' => 'Password confirmation does not match password.'
+            'password.required_with' => 'Geslo in potrditveno geslo sta obvezni.',
+            'password.min' => 'Geslo mora vsebovati vsaj 6 znakov.',
+            'password.confirmed' => 'Potrditveno geslo se ne ujema z geslom.',
+            'password.regex' => 'Geslo mora vsebovati vsaj 1 malo črko, 1 veliko črko ter en poseben znak.',
+            
+            'password_confirmation.same' => 'Potrditveno geslo se ne ujema z geslom.'
         ];
 
         return $request->validate($rules, $errorMessages);
@@ -256,12 +256,12 @@ class UserController extends Controller
         ];
 
         $errorMessages = [
-            'password.required_with' => 'Password and password confirmation are required.',
-            'password.min' => 'Password needs to contain atleast 6 characters.',
-            'password.confirmed' => 'Password confirmation does not match.',
-            'password.regex' => 'Password must contain at least 1 lower case letter, 1 upper case letter and one special character.',
-
-            'password_confirmation.same' => 'Password confirmation does not match password.'
+            'password.required_with' => 'Geslo in potrditveno geslo sta obvezni.',
+            'password.min' => 'Geslo mora vsebovati vsaj 6 znakov.',
+            'password.confirmed' => 'Potrditveno geslo se ne ujema z geslom.',
+            'password.regex' => 'Geslo mora vsebovati vsaj 1 malo črko, 1 veliko črko ter en poseben znak.',
+            
+            'password_confirmation.same' => 'Potrditveno geslo se ne ujema z geslom.'
         ];
 
         return $request->validate($rules, $errorMessages);
@@ -291,8 +291,8 @@ class UserController extends Controller
         ];
 
         $errorMessages = [
-            'file.image' => 'File must be an image.',
-            'file.mimes' => 'Accepted extensions are jpeg, png, jpg and gif.'
+            'file.image' => 'Datoteka je lahko le slika.',
+            'file.mimes' => 'Sprejeti formati so: jpeg, png, jpg and gif.'
         ];
 
         return $request->validate($rules, $errorMessages);
@@ -337,18 +337,18 @@ class UserController extends Controller
         ];
 
         $errorMessages = [
-            'name.required' => 'Name is required.',
-            'name.min' => 'Name needs to contain atleast 3 characters.',
-            'name.max' => 'Name can contain maximum 100 characters.',
-            'name.regex' => 'Name can only contain letters.',
+            'name.required' => 'Ime je obvezno.',
+            'name.min' => 'Ime mora vsebovati vsaj 3 črke.',
+            'name.max' => 'Ime lahko vsebuje največ 100 črk.',
+            'name.regex' => 'Ime lahko vsebuje le črke.',
 
-            'surname.required' => 'Surname is required.',
-            'surname.min' => 'Surname needs to contain atleast 3 characters.',
-            'surname.max' => 'Surname can contain maximum 100 characters.',
-            'surname.regex' => 'Surname can only contain letters.',
+            'surname.required' => 'Priimek je obvezen.',
+            'surname.min' => 'Priimek mora vsebovati vsaj 3 črke.',
+            'surname.max' => 'Priimek lahko vsebuje največ 100 črk.',
+            'surname.regex' => 'Priimek lahko vsebuje le črke.',
 
-            'password.min' => 'Password needs to contain atleast 6 characters.',
-            'password.regex' => 'Password must contain at least 1 lower case letter, 1 upper case letter and one special character.',
+            'password.min' => 'Geslo mora vsebovati vsaj 6 znakov.',
+            'password.regex' => 'Geslo mora vsebovati vsaj 1 malo črko, 1 veliko črko ter en poseben znak.',
         ];
 
         return $request->validate($rules, $errorMessages);

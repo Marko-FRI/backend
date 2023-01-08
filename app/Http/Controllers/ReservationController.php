@@ -104,15 +104,15 @@ class ReservationController extends Controller
         ];
 
         $errorMessages = [
-            'dateTime.required' => 'DateTime is required.',
-            'dateTime.date_format' => 'DateTime must be in correct format.',
-            'dateTime.after_or_equal' => 'Can only reservate after 12 hours from now.',
-            'dateTime.before_or_equal' => 'Can only reservate before 14 days from now.',
+            'dateTime.required' => 'Datum in čas sta obvezna.',
+            'dateTime.date_format' => 'Datum in čas morata biti v pravilnem formatu (Y-m-d H:i:s).',
+            'dateTime.after_or_equal' => 'Rezervira se lahko najhitreje 12 ur od sedaj.',
+            'dateTime.before_or_equal' => 'Rezervira se lahko največ 14 dni vnaprej.',
 
-            'numPersons.required' => 'Number of persons is required.',
-            'numPersons.integer' => 'Number of persons must be a number.',
-            'numPersons.min' => 'Number of persons must be at least 0.',
-            'numPersons.max' => "Number of persons is at most $max_seats.",
+            'numPersons.required' => 'Število oseb je obvezno.',
+            'numPersons.integer' => 'Število oseb mora biti število.',
+            'numPersons.min' => 'Število oseb je lahko najmanj 0 (brez oseb).',
+            'numPersons.max' => "Število oseb je lahko največ $max_seats.",
         ];
 
         return $request->validate($rules, $errorMessages);
@@ -124,7 +124,7 @@ class ReservationController extends Controller
         ];
 
         $errorMessages = [
-            'note.max' => 'Note can contain a most 512 characters.',
+            'note.max' => 'Opomba ima lahko največ 512 znakov.',
         ];
 
         return $request->validate($rules, $errorMessages);
@@ -139,8 +139,8 @@ class ReservationController extends Controller
         ];
 
         $errorMessages = [
-            'pickedMenus.*.quantity.integer' => 'Quantity must be integer.',
-            'pickedMenus.*.quantity.max' => "Quantity must be at most $numPersons."
+            'pickedMenus.*.quantity.integer' => 'Kvantiteta mora biti število.',
+            'pickedMenus.*.quantity.max' => "Kvantiteta je lahko največ $numPersons."
         ];
 
         return $request->validate($rules, $errorMessages);
