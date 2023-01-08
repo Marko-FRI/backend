@@ -117,7 +117,6 @@ class Controller extends BaseController
     }
 
     public function validateInteger(Request $request) {
-
         $message = "Request sent data must be number";
 
         if ($request->has('id_restaurant') && !is_int($request->id_restarant)) return abort(403, $message);
