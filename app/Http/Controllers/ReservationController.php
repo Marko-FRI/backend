@@ -17,6 +17,7 @@ class ReservationController extends Controller
     public function index(Request $request) {
         $this->validateReservationCredentials($request);
         $this->validateAdditionalReservationCredentials($request);
+        $this->validateMenuCredentials($request);
 
         $available_tables = $this->getAvailableTables($request);
         $is_available=false;
@@ -37,8 +38,6 @@ class ReservationController extends Controller
             $reservation->date_and_time_of_reservation = $request->dateTime;
             $reservation->note = $request->note;
             $reservation->save();
-
-            $this->validateMenuCredentials($request);
 
             foreach ($request->pickedMenus as $menu) {
                 $selected_menu = new Selected_menu;
