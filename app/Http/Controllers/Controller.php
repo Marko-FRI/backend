@@ -119,11 +119,11 @@ class Controller extends BaseController
     public function validateInteger(Request $request) {
         $message = "Request sent data must be number";
 
-        if ($request->has('id_restaurant') && !is_int($request->id_restarant)) return abort(403, $message);
-        if ($request->has('commentOffset') && !is_int($request->commentOffset)) return abort(403, $message);
-        if ($request->has('reservationOffset') && !is_int($request->reservationOffset)) return abort(403, $message);
-        if ($request->has('reviewOffset') && !is_int($request->reviewOffset)) return abort(403, $message);
-        if ($request->has('restaurantOffset') && !is_int($request->restaurantOffset)) return abort(403, $message);
-        if ($request->has('categoryOffset') && !is_int($request->categoryOffset)) return abort(403, $message);
+        if ($request->has('id_restaurant') && !is_int($request->id_restarant)) return abort(403, "Id restaurant mut be a number");
+        if ($request->has('commentOffset') && !is_int($request->commentOffset)) return abort(403, "commentOffset must be a number");
+        if ($request->has('reservationOffset') && !is_int($request->reservationOffset)) return abort(403, "reservationOffset must be a number");
+        if ($request->has('reviewOffset') && !is_int($request->reviewOffset)) return abort(403, "reviewOffset must be a number");
+        if ($request->has('restaurantOffset') && !is_int($request->restaurantOffset)) return abort(403, "restaurantOffset must be a number");
+        if ($request->has('categoryOffset') && !is_int($request->categoryOffset)) return abort(403, "categoryOffset must be a number");
     }
 }
