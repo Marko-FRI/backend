@@ -8,7 +8,7 @@ use App\Models\Category;
 
 class FooterController extends Controller
 {
-    public function index(Request $request) {
+    public function index() {
         $categories = Category::select('id_category', 'name', 'image_path')->get();
         
         foreach ($categories as $category)

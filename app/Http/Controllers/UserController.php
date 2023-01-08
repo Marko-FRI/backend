@@ -238,9 +238,8 @@ class UserController extends Controller
         
         $isChange = true;
         
-        if ($user && Hash::check($request->password, $user->password)) {
+        if ($user && Hash::check($request->password, $user->password))
             $isChange = false;
-        }
 
         $response = [
             'isChange' => $isChange
@@ -272,7 +271,7 @@ class UserController extends Controller
 
         $user = auth('sanctum')->user();
 
-        $imageName = $user->id_user . time().'.'.$request->file->extension();
+        $imageName = $user->id_user . time() .'.'. $request->file->extension();
         
         $request->file->move(public_path('images/user_images'), $imageName);
 
