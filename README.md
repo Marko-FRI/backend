@@ -19,3 +19,12 @@ Design sva naredila skupaj v figmi.
 ![4](/uploads/9c8897456d1cc180937f312092a311cc/4.PNG)
 
 ![5](/uploads/5502517c40402fe4073605af5bbc2606/5.PNG)
+
+
+Konceptualni, fizični model in SQL dump:
+
+![image](/uploads/76c3ca1823d00742de96500e1b0e425a/image.png)
+
+![image](/uploads/5ffca4af2e0a14ad843201d202f0f962/image.png)
+
+[dump.sql](/uploads/89a4beae5a2bc50c1bd997dbc79fb19a/dump.sql)
