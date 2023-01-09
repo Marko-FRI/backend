@@ -1,5 +1,15 @@
 BMR - Book My restaurant
 
+Avtorja:
+    -   Žan jankovec, 63200114
+    -   Marko Adamič, 63
+
+Izdelana rešitev je končana spletna in android aplikacija za vnaprejšnje naročanje rezervacije (rezerviranje miz restavracije, če je na voljo), pri katerem lahko izbere menije če želi (za vnaprej pripravljeno hrano). Uporabnik mora imeti narejen račun (s katerim lahko komentira, rezervira, doda restavracijo med priljubljene, oceni, …), če ne lahko samo gleda in išče restavracije, bere komentarje.
+
+Marko Adamič je poskrbel za frontend.
+Žan jankovec je poskrbel za backend.
+Design sva naredila skupaj.
+
 ![1](/uploads/8059b7d351c9ad10b7650e930b13675b/1.PNG)
 
 ![2](/uploads/441a8f56fd8a2964b0c9a1b3abd77926/2.PNG)
