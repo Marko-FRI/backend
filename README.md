@@ -6,7 +6,7 @@ Avtorja:
 
 Izdelana rešitev je končana spletna in android aplikacija za vnaprejšnje naročanje rezervacije (rezerviranje miz restavracije, če je na voljo), pri katerem lahko izbere menije če želi (za vnaprej pripravljeno hrano). Uporabnik mora imeti narejen račun (s katerim lahko komentira, rezervira, doda restavracijo med priljubljene, oceni, …), če ne lahko samo gleda in išče restavracije, bere komentarje.
 
-Marko Adamič je poskrbel za frontend (sprejem responsev, prikaz podatkov, zgradnjo strukture strani, responsevzivnost strani, pretvorba v android, validacija, ...).
+Marko Adamič je poskrbel za frontend (sprejem responsev, prikaz podatkov, zgradnjo strukture strani, odzivnost strani, pretvorba v android, validacija, ...).
 Žan jankovec je poskrbel za backend (vzpostavitev zalednega sistema, torej od izdelave podatkovne baze - konceptualni model, fizični model, SQL dump, izvedel sem povezavo z laravel – generacija seederjev, factoryjev, modulov, migracij, ...).
 Design sva naredila skupaj v figmi.
 
