@@ -12,6 +12,19 @@ Design sva naredila skupaj v figmi.
 
 V wiki predelu je napisana dokumentacija za vzpostavitev, tako za frontend in backend.
 
+Za zagon mobilne aplikacije: 
+
+v backend v .env (za mobile)
+APP_URL=http://192.168.0.16:8000
+FRONTEND_URL=http://192.168.0.16:9000
+SESSION_DOMAIN=192.168.0.16
+SANCTUM_STATEFUL_DOMAINS=192.168.0.16:9000
+
+ko zaženeš:
+v backend: php artisan serve --host=192.168.0.16
+v frontend za mobile: quasar dev -m capacitor -T android (izbereš ip 192.168.0.16) 
+v brskalnik napišeš: 192.168.0.16:9000
+
 ![1](/uploads/8059b7d351c9ad10b7650e930b13675b/1.PNG)
 
 ![2](/uploads/441a8f56fd8a2964b0c9a1b3abd77926/2.PNG)
