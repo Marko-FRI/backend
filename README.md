@@ -1,66 +1,45 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+BMR - Book My restaurant
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Avtorja:
+    -   Žan jankovec, 63200114
+    -   Marko Adamič, 63200041
 
-## About Laravel
+Izdelana rešitev je končana spletna in android aplikacija za vnaprejšnje naročanje rezervacije (rezerviranje miz restavracije, če je na voljo), pri katerem lahko izbere menije če želi (za vnaprej pripravljeno hrano). Uporabnik mora imeti narejen račun (s katerim lahko komentira, rezervira, doda restavracijo med priljubljene, oceni, …), če ne lahko samo gleda in išče restavracije, bere komentarje.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Marko Adamič je poskrbel za frontend (sprejem responsev, prikaz podatkov, zgradnjo strukture strani, odzivnost strani, pretvorba v android, validacija, ...).
+Žan jankovec je poskrbel za backend (vzpostavitev zalednega sistema, torej od izdelave podatkovne baze - konceptualni model, fizični model, SQL dump, izvedel sem povezavo z laravel – generacija seederjev, factoryjev, modulov, migracij, ...).
+Design sva naredila skupaj v figmi.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+V wiki predelu je napisana dokumentacija za vzpostavitev, tako za frontend in backend.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Za zagon mobilne aplikacije: 
 
-## Learning Laravel
+v backend v .env (za mobile)
+APP_URL=http://192.168.0.16:8000
+FRONTEND_URL=http://192.168.0.16:9000
+SESSION_DOMAIN=192.168.0.16
+SANCTUM_STATEFUL_DOMAINS=192.168.0.16:9000
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+ko zaženeš:
+v backend: php artisan serve --host=192.168.0.16
+v frontend za mobile: quasar dev -m capacitor -T android (izbereš ip 192.168.0.16) 
+v brskalnik napišeš: 192.168.0.16:9000
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+![1](/uploads/8059b7d351c9ad10b7650e930b13675b/1.PNG)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+![2](/uploads/441a8f56fd8a2964b0c9a1b3abd77926/2.PNG)
 
-## Laravel Sponsors
+![3](/uploads/6aabd23f98eb315d9f54dd3526b2fbec/3.PNG)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+![4](/uploads/9c8897456d1cc180937f312092a311cc/4.PNG)
 
-### Premium Partners
+![5](/uploads/5502517c40402fe4073605af5bbc2606/5.PNG)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
 
-## Contributing
+Konceptualni, fizični model in SQL dump:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+![image](/uploads/76c3ca1823d00742de96500e1b0e425a/image.png)
 
-## Code of Conduct
+![image](/uploads/5ffca4af2e0a14ad843201d202f0f962/image.png)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+[dump.sql](/uploads/89a4beae5a2bc50c1bd997dbc79fb19a/dump.sql)
