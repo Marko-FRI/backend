@@ -10,6 +10,8 @@ Marko Adamič je poskrbel za frontend (sprejem responsev, prikaz podatkov, zgrad
 Žan jankovec je poskrbel za backend (vzpostavitev zalednega sistema, torej od izdelave podatkovne baze - konceptualni model, fizični model, SQL dump, izvedel sem povezavo z laravel – generacija seederjev, factoryjev, modulov, migracij, ...).
 Design sva naredila skupaj v figmi.
 
+V wiki predelu je napisana dokumentacija za vzpostavitev, tako za frontend in backend.
+
 ![1](/uploads/8059b7d351c9ad10b7650e930b13675b/1.PNG)
 
 ![2](/uploads/441a8f56fd8a2964b0c9a1b3abd77926/2.PNG)
