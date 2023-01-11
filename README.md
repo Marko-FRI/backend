@@ -71,19 +71,19 @@ Ne zavarovane poti (lahko si odjavljen):
     /footerData => dobimo le podatke o footerju strani (dobimo kategorije)
 
 Zavarovane poti z laravel sanctum (moras biti prijavljen):
-    /logout =>
-    /addReview =>
+    /logout => odjava iz sistema (brisanje tokena iz pinie)
+    /addReview => dodajanje mnenja restavraciji, ki jo imamo odprto na  /restaurant/{id_restaurant} (dobimo message, število mnenj, mnenja, ocena)
 
-    /restaurantAvaliability =>
-    /reserveRestaurant =>
+    /restaurantAvaliability => preveri, če je določena restavracija na voljo za tist določen čas, za toliko oseb kolikor izberemo (dobimo samo true ali false)
+    /reserveRestaurant => rezervira restavracijo, če restaurantAvaliability velja (dobimo message)
 
-    /favourite =>
+    /favourite => dodamo restavracijo med priljubljene, ali pa jo odstranimo
 
-    /profile =>
-    /deleteReservation =>
+    /profile => ogled svojih podatkov profila (dobimo priljubljene restavracije, število restavracij, X aktivnih, in X preteklih rezervacij in število aktivnih in preteklih rezervacij)
+    /deleteReservation => izbris rezervacije
 
-    /moreActiveReservations =>
-    /morePastReservations =>
+    /moreActiveReservations => naloži X več aktivnih rezervacij na /profile (dobimo aktivne rezervacije)
+    /morePastReservations => naloži X več preteklih rezervacij na /profile (dobimo aktivne rezervacije)
 
     /checkChangeInPassword =>
     /editProfile =>
