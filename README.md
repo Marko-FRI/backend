@@ -15,10 +15,15 @@ V wiki predelu je napisana dokumentacija za vzpostavitev, tako za frontend in ba
 Za zagon mobilne aplikacije: 
 
 v backend v .env (za mobile)
+
 APP_URL=http://192.168.0.16:8000
+
 FRONTEND_URL=http://192.168.0.16:9000
+
 SESSION_DOMAIN=192.168.0.16
+
 SANCTUM_STATEFUL_DOMAINS=192.168.0.16:9000
+
 
 ko zaženeš:
 v backend: php artisan serve --host=192.168.0.16
