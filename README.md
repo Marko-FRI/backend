@@ -56,7 +56,7 @@ API dokumentacija:
 ```
 Ne zavarovane poti (lahko si odjavljen):
     /login => preverjanje podatkov(geslo in gmail) za uspešen login z ustrezno validacijo, ob uspešnem smo prijavljeni (generira se token v pinio)
-    /register => preverjanje podatkov (ime, priimek, email, geslo) za uspešno registracijo z ustrezno validacijo, ob uspešnem smo prijavlj(generira se token v pinio)
+    /register => preverjanje podatkov (ime, priimek, email, geslo) za uspešno registracijo z ustrezno validacijo, ob uspešnem smo prijavljeni(generira se token v pinio)
 
     /homePage => prva stran, ki se pokaže ob zagonu aplikacije (dobimo X restavracij, Y kategorij z N restavracijami, in M mnenj)
     /homePageMoreReviews => prva stran, ki se pokaže ob zagonu aplikacije (dobimo M dodatnih mnenj)
