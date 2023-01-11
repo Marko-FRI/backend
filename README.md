@@ -51,3 +51,46 @@ Konceptualni, fizični model in SQL dump:
 ![image](/uploads/5ffca4af2e0a14ad843201d202f0f962/image.png)
 
 [dump.sql](/uploads/89a4beae5a2bc50c1bd997dbc79fb19a/dump.sql)
+
+API dokumentacija:
+```
+Ne zavarovane poti (lahko si odjavljen):
+    /login =>
+    /register =>
+
+    /homePage =>
+    /homePageMoreReviews =>
+
+    /restaurantsFirstLoad =>
+    /restaurants =>
+
+    /restaurant/{id_restaurant} =>
+
+    /moreReviews =>
+
+    /footerData =>
+
+Zavarovane poti z laravel sanctum (moras biti prijavljen):
+    /logout =>
+    /addReview =>
+
+    /restaurantAvaliability =>
+    /reserveRestaurant =>
+
+    /favourite =>
+
+    /profile =>
+    /deleteReservation =>
+
+    /moreActiveReservations =>
+    /morePastReservations =>
+
+    /checkChangeInPassword =>
+    /editProfile =>
+    /editProfileImage =>
+
+    /adminRestaurantData =>
+    /moreAdminActiveReservations =>
+    /moreAdminPastReservations =>
+    /deleteAdminReservation =>
+```
