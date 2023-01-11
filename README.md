@@ -85,12 +85,12 @@ Zavarovane poti z laravel sanctum (moras biti prijavljen):
     /moreActiveReservations => naloži X več aktivnih rezervacij na /profile (dobimo aktivne rezervacije)
     /morePastReservations => naloži X več preteklih rezervacij na /profile (dobimo aktivne rezervacije)
 
-    /checkChangeInPassword => preveri spremembe v geslu (dobimo bool)
-    /editProfile => spremeni podatke uporabnika, če smo jih spremenili in če je vnešeno geslo pravilno (dobimo poonvne podatke uporabnika) 
-    /editProfileImage => doda oz. spremeni slik uporabnika (dobimo sliko)
+    /checkChangeInPassword => preveri spremembe v geslu na /profile (dobimo bool)
+    /editProfile => spremeni podatke uporabnika na /profile, če smo jih spremenili in če je vnešeno geslo pravilno (dobimo ponovne podatke uporabnika) 
+    /editProfileImage => doda oz. spremeni slik uporabnika na /profile (dobimo sliko)
 
     /adminRestaurantData => stran za admina restavracije (X preteklih in aktivnih rezervacij, da lahko admin z njimi manipulira)
     /moreAdminActiveReservations => na /adminRestaurantData naloži X več aktivnih rezervacij
     /moreAdminPastReservations => na /adminRestaurantData naloži X več preteklih rezervacij
-    /deleteAdminReservation => admin izbriše rezervacijo (če npr se ne more udeležiti)
+    /deleteAdminReservation => admin izbriše rezervacijo (če npr. se ne more udeležiti)
 ```
