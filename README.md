@@ -22,8 +22,11 @@ SANCTUM_STATEFUL_DOMAINS=192.168.0.16:9000
 
 ko zaženeš:
 v backend: php artisan serve --host=192.168.0.16
-v frontend za mobile: quasar dev -m capacitor -T android (izbereš ip 192.168.0.16) 
+
+v frontend za mobile: quasar dev -m capacitor -T android (izbereš ip 192.168.0.16)
+
 v brskalnik napišeš: 192.168.0.16:9000
+
 
 ![1](/uploads/8059b7d351c9ad10b7650e930b13675b/1.PNG)
 
