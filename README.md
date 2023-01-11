@@ -55,20 +55,20 @@ Konceptualni, fizični model in SQL dump:
 API dokumentacija:
 ```
 Ne zavarovane poti (lahko si odjavljen):
-    /login =>
-    /register =>
+    /login => preverjanje podatkov(geslo in gmail) za uspešen login z ustrezno validacijo, ob uspešnem smo prijavljeni (generira se token v pinio)
+    /register => preverjanje podatkov (ime, priimek, email, geslo) za uspešno registracijo z ustrezno validacijo, ob uspešnem smo prijavlj(generira se token v pinio)
 
-    /homePage =>
-    /homePageMoreReviews =>
+    /homePage => prva stran, ki se pokaže ob zagonu aplikacije (dobimo X restavracij, Y kategorij z N restavracijami, in M mnenj)
+    /homePageMoreReviews => prva stran, ki se pokaže ob zagonu aplikacije (dobimo M dodatnih mnenj)
 
-    /restaurantsFirstLoad =>
-    /restaurants =>
+    /restaurantsFirstLoad => stran, ki se naloži ko želimo gledati, iskati, urejati ali filtrirati po kategoriji restavracije (dobimo X kategorij, Y restavracij in število restavracij - dodatno še pagination)
+    /restaurants => enako kot restaurantsFirstLoad, le da dobimo filtrirane podatke (dobimo restavracije, število restavracij, error message)
 
-    /restaurant/{id_restaurant} =>
+    /restaurant/{id_restaurant} => ogled ene restavracije in X njenih mnenj, delovnega urnika, gumb za rezervacijo, menije (dobimo podatke o restavraciji, menije, urnik, mnenje, število menijev, število mnenj, slike socialnih omrežij)
 
-    /moreReviews =>
+    /moreReviews => enako kot restaurant/{id_restaurant}, le da dobimo X več mnenj
 
-    /footerData =>
+    /footerData => dobimo le podatke o footerju strani (dobimo kategorije)
 
 Zavarovane poti z laravel sanctum (moras biti prijavljen):
     /logout =>
