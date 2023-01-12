@@ -20,7 +20,7 @@ class ReservationFactory extends Factory
     {
         return [
             'id_user' => User::factory(),
-            'date_and_time_of_reservation' => $this->faker->unique()->dateTimeBetween($startDate = '+1 days', $endDate = '+14 days')->format('d-m-Y H:i:s'),
+            'date_and_time_of_reservation' => $this->faker->unique()->dateTimeBetween($startDate = '+1 days', $endDate = '+14 days')->format('Y-m-d H:i:s'),
             'note' => $this->faker->randomElement([NULL,NULL,NULL,'brez glutena','brez sladkorja'])
         ];
     }
